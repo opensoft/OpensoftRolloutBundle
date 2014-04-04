@@ -1,6 +1,7 @@
 OpensoftRolloutBundle
 =====================
 
+[![Build Status](https://travis-ci.org/opensoft/OpensoftRolloutBundle.svg?branch=master)](https://travis-ci.org/opensoft/OpensoftRolloutBundle)
 
 Installation
 ------------
