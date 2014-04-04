@@ -17,5 +17,6 @@
         "psr-4": {
             "Opensoft\\RolloutBundle\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
