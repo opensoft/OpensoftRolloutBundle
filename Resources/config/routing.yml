@@ -1,0 +1,45 @@
+
+opensoft_rollout:
+    path: /
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:index
+
+opensoft_rollout_feature_activate:
+    path: /{feature}/activate
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:activate
+
+opensoft_rollout_feature_deactivate:
+    path: /{feature}/deactivate
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:deactivate
+
+opensoft_rollout_feature_increment_percentage:
+    path: /{feature}/increment-percentage
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:incrementPercentage
+
+opensoft_rollout_feature_decrement_percentage:
+    path: /{feature}/decrement-percentage
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:decrementPercentage
+
+opensoft_rollout_feature_activate_group:
+    path: /{feature}/activate-group/{group}
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:activateGroup
+
+opensoft_rollout_feature_deactivate_group:
+    path: /{feature}/deactivate-group/{group}
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:deactivateGroup
+
+opensoft_rollout_feature_activate_user:
+    path: /{feature}/activate-user
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:activateUser
+
+opensoft_rollout_feature_deactivate_user:
+    path: /{feature}/deactivate-user/{id}
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:deactivateUser

@@ -1,0 +1,205 @@
+{% extends "OpensoftRolloutBundle::layout.html.twig" %}
+
+{% block rollout_content %}
+<div class="page-header">
+    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#helpModal">
+        <span class="glyphicon glyphicon-question-sign"></span>
+    </button>
+    <h1>Feature Flags <small>Control your feature rollout</small></h1>
+</div>
+
+{% block rollout_flash_messages %}
+{% set flashes = app.session.flashBag.all %}
+{% if flashes|length > 0 %}
+    {% for type, messages in flashes %}
+        {% for key, message in messages %}
+                <div class="alert alert-{{ type }} alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message|trans() }}
+                </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th colspan="3">Priority Order</th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <th>Name</th>
+            <th>1) Percentage</th>
+            <th>2) Users</th>
+            <th>3) Groups of users</th>
+            <th>Global Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name in rollout.features %}
+            {% set feature = rollout.get(name) %}
+
+            {% if feature.percentage == 100 %}
+                {% set rowClass = 'success' %}
+            {% elseif feature.groups|length > 0 or feature.users|length > 0 or feature.percentage > 0 %}
+                {% set rowClass = 'warning' %}
+            {% else %}
+                {% set rowClass = 'danger' %}
+            {% endif %}
+
+            <tr class="{{ rowClass }}">
+                <td style="font-size: 24px;">
+                    {% if feature.percentage == 100 %}
+                        <span class="glyphicon glyphicon-ok-circle" title="This feature is globally enabled by having a percentage at 100%"></span>
+                    {% elseif feature.percentage > 0 %}
+                        <span class="glyphicon glyphicon-warning-sign" title="This feature is partially enabled by percentage"></span>
+                    {% elseif feature.groups|length > 0 or feature.users|length > 0 %}
+                        <span class="glyphicon glyphicon-warning-sign" title="This feature is partially enabled by group or user"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-ban-circle" title="This feature is globally disabled"></span>
+                    {% endif %}
+                </td>
+                <td>
+                    <strong title="The name of the feature.  Used in code as part of checking for the feature.">
+                        {% block feature_name %}{{ feature.name }}{% endblock %}
+                    </strong>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-xs pull-right" style="padding-left: 8px;">
+                        {% if feature.percentage > 0 %}
+                            <a class="btn btn-default" href="{{ path('opensoft_rollout_feature_decrement_percentage', {'feature': feature.name}) }}">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+                        {% else %}
+                            <button type="button" class="btn btn-default" disabled>
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        {% endif %}
+
+                        {% if feature.percentage < 100 %}
+                            <a class="btn btn-default" href="{{ path('opensoft_rollout_feature_increment_percentage', {'feature': feature.name}) }}">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        {% else %}
+                            <button type="button" class="btn btn-default" disabled>
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        {% endif %}
+                    </div>
+                    <div class="progress" style="margin-bottom: 0;">
+                        <div class="progress-bar  progress-bar-{{ rowClass }}" role="progressbar" aria-valuenow="{{ feature.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ feature.percentage }}%;">
+                            {{ feature.percentage }}%
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {% if feature.users|length > 0 %}
+                        <ul class="list-unstyled">
+                            {% for user in feature.users %}
+                            <li>
+                                {{ user }} - <a href="{{ path('opensoft_rollout_feature_deactivate_user', {'feature': feature.name, 'id': user}) }}">remove</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form class="form-inline" role="form" action="{{ path('opensoft_rollout_feature_activate_user', {'feature': feature.name}) }}">
+                        <div class="form-group">
+                            <input class="form-control input-sm" type="text" name="user" id="user" placeholder="user" />
+                        </div>
+                        <button class="btn btn-default btn-sm" type="submit">add</button>
+                    </form>
+                </td>
+                <td>
+                    <ul class="list-unstyled">
+                        <!-- Default "all" group -->
+                        <li>
+                            <span class="glyphicon glyphicon-{{ 'all' in feature.groups ? 'ok' : 'remove' }}"></span>
+                            <span title="Default group for all logged in users">all</span> -
+                            {% if 'all' in feature.groups %}
+                                <a href="{{ path('opensoft_rollout_feature_deactivate_group', {'feature': feature.name, 'group': 'all'}) }}">
+                                    deactivate
+                                </a>
+                            {% else %}
+                                <a href="{{ path('opensoft_rollout_feature_activate_group', {'feature': feature.name, 'group': 'all'}) }}">
+                                    activate
+                                </a>
+                            {% endif %}
+                        </li>
+
+                        {% for groupDefinition in rollout.groupDefinitions %}
+                            <li>
+                                <span class="glyphicon glyphicon-{{ groupDefinition.name in feature.groups ? 'ok' : 'remove' }}"></span>
+                                <span title="{{ groupDefinition.description }}">{{ groupDefinition.name }}</span> -
+                                {% if groupDefinition.name in feature.groups %}
+                                    <a href="{{ path('opensoft_rollout_feature_deactivate_group', {'feature': feature.name, 'group': groupDefinition.name}) }}">
+                                        deactivate
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('opensoft_rollout_feature_activate_group', {'feature': feature.name, 'group': groupDefinition.name}) }}">
+                                        activate
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <a class="btn btn-default btn-sm" href="{{ path('opensoft_rollout_feature_activate', {'feature': feature.name }) }}" title="Globally activate this feature">
+                        activate
+                    </a>
+                    <a class="btn btn-default btn-sm" href="{{ path('opensoft_rollout_feature_deactivate', {'feature': feature.name }) }}" title="Globally deactivate this feature">
+                        deactivate
+                    </a>
+                </td>
+            </tr>
+
+        {% else %}
+            <tr>
+                <td colspan="6">You have no features..</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="helpModalLabel">Feature Management Help</h4>
+            </div>
+            <div class="modal-body">
+                {% block rollout_help_block %}
+                    <h4>Status</h4>
+                    <p>Shows a status symbol based on how much of the feature is rolled out</p>
+                    <h4>Name</h4>
+                    <p>The feature name.  This key is use in the code and must match exactly.</p>
+                    <h4>Priorities</h4>
+                    <p>When calculating if a feature is enabled, a list of priorities will be matched before the first one returns true.</p>
+                    <dl class="dl-horizontal">
+                        <dt>Percentage</dt>
+                        <dd>Controls the percentage of logged in users that will have this feature activated for them.</dd>
+                        <dt>Users</dt>
+                        <dd>Provide a list of individual users which have this feature active</dd>
+                        <dt>Groups of users</dt>
+                        <dd>Define custom groups that are matched dynamically</dd>
+                    </dl>
+                    <h4>Global Actions</h4>
+                    <p>
+                        The activate and deactivate buttons globally control this feature.  Activating it will enable the features for all users of the application.
+                    </p>
+                {% endblock %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock rollout_content %}
