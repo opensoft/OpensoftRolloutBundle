@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Opensoft\\RolloutBundle\\": "src/"
+            "Opensoft\\RolloutBundle\\": ""
         }
     },
     "minimum-stability": "dev"
