@@ -13,6 +13,9 @@
         "symfony/framework-bundle": "~2.1",
         "opensoft/rollout": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "psr-4": {
             "Opensoft\\RolloutBundle\\": "src/"
