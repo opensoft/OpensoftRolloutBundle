@@ -1,5 +1,6 @@
 {
     "name": "opensoft/rollout-bundle",
+    "description": "A Symfony2 Bundle for opensoft/rollout",
     "license": "MIT",
     "authors": [
         {
