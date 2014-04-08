@@ -1,7 +1,4 @@
 <?php
-/**
- * 
- */
 
 namespace Opensoft\RolloutBundle\Entity;
 
@@ -62,4 +59,4 @@ class Feature
     {
         $this->settings = $settings;
     }
-} 
+}

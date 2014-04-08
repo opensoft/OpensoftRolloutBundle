@@ -1,14 +1,10 @@
 <?php
-/**
- * 
- */
 
 namespace Opensoft\RolloutBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-
 
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
@@ -33,4 +29,4 @@ class AddGroupDefinitionPass implements CompilerPassInterface
             $definition->addMethodCall('addGroupDefinition', array(new Reference($id)));
         }
     }
-} 
+}

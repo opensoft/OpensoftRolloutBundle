@@ -20,11 +20,11 @@ class DefaultController extends ContainerAware
      */
     public function indexAction()
     {
-        return $this->container->get('templating')->render('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->getRollout()));
+        return $this->container->get('templating')->renderResponse('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->getRollout()));
     }
 
     /**
-     * @param string $feature
+     * @param  string           $feature
      * @return RedirectResponse
      */
     public function activateAction($feature)
@@ -33,11 +33,11 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('success', sprintf("Feature '%s' is now globally activated", $feature));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
+     * @param  string           $feature
      * @return RedirectResponse
      */
     public function deactivateAction($feature)
@@ -46,11 +46,11 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('danger', sprintf("Feature '%s' is now globally deactivated", $feature));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
+     * @param  string           $feature
      * @return RedirectResponse
      */
     public function incrementPercentageAction($feature)
@@ -61,11 +61,11 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
+     * @param  string           $feature
      * @return RedirectResponse
      */
     public function decrementPercentageAction($feature)
@@ -76,12 +76,12 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
-     * @param string $group
+     * @param  string           $feature
+     * @param  string           $group
      * @return RedirectResponse
      */
     public function activateGroupAction($feature, $group)
@@ -90,12 +90,12 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' is now active in group '%s'", $feature, $group));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
-     * @param string $group
+     * @param  string           $feature
+     * @param  string           $group
      * @return RedirectResponse
      */
     public function deactivateGroupAction($feature, $group)
@@ -104,12 +104,12 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' is no longer active in group '%s'", $feature, $group));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param Request $request
-     * @param string $feature
+     * @param  Request          $request
+     * @param  string           $feature
      * @return RedirectResponse
      */
     public function activateUserAction(Request $request, $feature)
@@ -125,12 +125,12 @@ class DefaultController extends ContainerAware
             $this->addFlash('danger', sprintf("User '%s' not found", $requestUser));
         }
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**
-     * @param string $feature
-     * @param string $id
+     * @param  string           $feature
+     * @param  string           $id
      * @return RedirectResponse
      */
     public function deactivateUserAction($feature, $id)
@@ -140,7 +140,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("User '%s' was deactivated from feature '%s'", $user->getRolloutIdentifier(), $feature));
 
-        return $this->redirect($this->generateUrl('opensoft_rollout'));
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 
     /**

@@ -1,7 +1,4 @@
 <?php
-/**
- * 
- */
 
 namespace Opensoft\RolloutBundle\Twig\Extension;
 
@@ -34,7 +31,7 @@ class RolloutExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('rollout_is_active', function($feature, RolloutUserInterface $user = null) {
+            new \Twig_SimpleFunction('rollout_is_active', function ($feature, RolloutUserInterface $user = null) {
                 return $this->rollout->isActive($feature, $user);
             })
         );
@@ -49,4 +46,4 @@ class RolloutExtension extends \Twig_Extension
     {
         return 'rollout_is_active';
     }
-} 
+}

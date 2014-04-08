@@ -1,13 +1,10 @@
 <?php
-/**
- * 
- */
 
 namespace Opensoft\RolloutBundle\Storage\Doctrine;
+
 use Doctrine\ORM\EntityManager;
 use Opensoft\Rollout\Storage\StorageInterface;
 use Opensoft\RolloutBundle\Entity\Feature;
-
 
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
@@ -42,7 +39,7 @@ class DoctrineORMStorage implements StorageInterface
     }
 
     /**
-     * @param  string $key
+     * @param  string     $key
      * @return mixed|null Null if the value is not found
      */
     public function get($key)
@@ -58,7 +55,7 @@ class DoctrineORMStorage implements StorageInterface
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function set($key, $value)
     {
@@ -74,4 +71,4 @@ class DoctrineORMStorage implements StorageInterface
         $this->em->persist($feature);
         $this->em->flush();
     }
-} 
+}

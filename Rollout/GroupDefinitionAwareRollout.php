@@ -1,12 +1,8 @@
 <?php
-/**
- * 
- */
 
 namespace Opensoft\RolloutBundle\Rollout;
 
 use Opensoft\Rollout\Rollout;
-
 
 /**
  * Ease the way to define group definitions with a tagged service
@@ -37,4 +33,4 @@ class GroupDefinitionAwareRollout extends Rollout
 
         $this->defineGroup($groupDefinition->getName(), $groupDefinition->getCallback());
     }
-} 
+}

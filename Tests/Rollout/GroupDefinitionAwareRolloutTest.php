@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 namespace Opensoft\RolloutBundle\Tests\Rollout;
 
@@ -19,7 +16,7 @@ class GroupDefinitionAwareRolloutTest extends \PHPUnit_Framework_TestCase
         $group = $this->getMock('Opensoft\RolloutBundle\Rollout\GroupDefinitionInterface');
         $group->expects($this->once())->method('getName')->will($this->returnValue('test_group'));
 
-        $callback = function(RolloutUserInterface $user) {
+        $callback = function (RolloutUserInterface $user) {
             return $user->name == 'test_user';
         };
 

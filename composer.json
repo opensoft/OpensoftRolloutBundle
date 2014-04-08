@@ -16,6 +16,9 @@
     "require-dev": {
         "phpunit/phpunit": "*"
     },
+    "suggest": {
+        "liip/doctrine-cache-bundle": "For use with the DoctrineCacheStorageAdapter"
+    },
     "autoload": {
         "psr-4": {
             "Opensoft\\RolloutBundle\\": ""
