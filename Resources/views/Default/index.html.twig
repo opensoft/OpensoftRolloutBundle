@@ -148,12 +148,17 @@
                     </ul>
                 </td>
                 <td>
+                    {% block rollout_feature_actions %}
                     <a class="btn btn-default btn-sm" href="{{ path('opensoft_rollout_feature_activate', {'feature': feature.name }) }}" title="Globally activate this feature">
                         activate
                     </a>
                     <a class="btn btn-default btn-sm" href="{{ path('opensoft_rollout_feature_deactivate', {'feature': feature.name }) }}" title="Globally deactivate this feature">
                         deactivate
                     </a>
+                    <a class="btn btn-default btn-sm" href="{{ path('opensoft_rollout_feature_remove', {'feature': feature.name }) }}" title="Globally remove this feature">
+                        remove
+                    </a>
+                    {% endblock %}
                 </td>
             </tr>
 

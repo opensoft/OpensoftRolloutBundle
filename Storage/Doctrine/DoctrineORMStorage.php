@@ -69,6 +69,18 @@ class DoctrineORMStorage implements StorageInterface
         $feature->setSettings($value);
 
         $this->em->persist($feature);
-        $this->em->flush();
+        $this->em->flush($feature);
+    }
+
+    /**
+     * @param string $key
+     */
+    public function remove($key)
+    {
+        $feature = $this->repository->findOneBy(array('name' => $key));
+        if ($feature) {
+            $this->em->remove($feature);
+            $this->em->flush($feature);
+        }
     }
 }

@@ -144,6 +144,19 @@ class DefaultController extends ContainerAware
     }
 
     /**
+     * @param  string           $feature
+     * @return RedirectResponse
+     */
+    public function removeAction($feature)
+    {
+        $this->getRollout()->remove($feature);
+
+        $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
+
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+    }
+
+    /**
      * @return Rollout
      */
     private function getRollout()

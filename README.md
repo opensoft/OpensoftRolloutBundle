@@ -127,6 +127,8 @@ class AcmeEmployeeGroupDefinition implements GroupDefinitionInterface
 
 Implement a custom storage solution.
 
+**Note:** The rollout `StorageInterface` [changed](https://github.com/opensoft/rollout/releases/tag/2.0.0) in version `2.0.0`.
+
 ```php
 <?php
 
@@ -150,6 +152,15 @@ class MyStorage implements StorageInterface
     public function set($key, $value)
     {
         // implement set
+    }
+
+    /**
+     * @param string $key
+     * @since 2.0.0
+     */
+    public function remove($key)
+    {
+        // implement remove
     }
 }
 ```
