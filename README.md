@@ -24,6 +24,8 @@ And activate it inside your `app\AppKernel.php`
 new Opensoft\RolloutBundle\OpensoftRolloutBundle(),
 ```
 
+**Note:** `^3.0` of this bundle is compatible with SF 2.8|3.0
+
 ### 2) Configuration
 
 Add the following to your configuration

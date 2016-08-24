@@ -6,6 +6,7 @@ use Opensoft\Rollout\Rollout;
 use Opensoft\RolloutBundle\Rollout\UserProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class DefaultController extends ContainerAware
+class DefaultController
 {
+    use ContainerAwareTrait;
+
     /**
      * @return Response
      */

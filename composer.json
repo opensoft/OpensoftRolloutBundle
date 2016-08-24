@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
-        "symfony/framework-bundle": "~2.1",
+        "php": ">=5.4",
+        "symfony/framework-bundle": "~2.4|^3.0",
         "opensoft/rollout": "~2.0"
     },
     "require-dev": {
