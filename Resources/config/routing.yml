@@ -48,3 +48,8 @@ opensoft_rollout_feature_remove:
     path: /{feature}/remove
     defaults:
         _controller: OpensoftRolloutBundle:Default:remove
+
+opensoft_rollout_feature_set_request_param:
+    path: /{feature}/set-request-param
+    defaults:
+        _controller: OpensoftRolloutBundle:Default:setRequestParam

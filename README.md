@@ -7,7 +7,7 @@ A Symfony2 Bundle for [opensoft/rollout](http://github.com/opensoft/rollout)
 
 ### Obligatory Screenshot
 
-![Screenshot](https://github.com/opensoft/OpensoftRolloutBundle/raw/master/Resources/doc/screenshot.png)
+![Screenshot](https://github.com/opensoft/OpensoftRolloutBundle/raw/master/Resources/doc/screenshot-extended.png)
 
 Installation
 ------------
