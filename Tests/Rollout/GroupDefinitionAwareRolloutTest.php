@@ -13,7 +13,7 @@ class GroupDefinitionAwareRolloutTest extends \PHPUnit_Framework_TestCase
 {
     public function testGroupDefinitionAware()
     {
-        $group = $this->getMock('Opensoft\RolloutBundle\Rollout\GroupDefinitionInterface');
+        $group = $this->getMockBuilder('Opensoft\RolloutBundle\Rollout\GroupDefinitionInterface')->getMock();
         $group->expects($this->once())->method('getName')->will($this->returnValue('test_group'));
 
         $callback = function (RolloutUserInterface $user) {

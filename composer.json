@@ -14,7 +14,7 @@
         "opensoft/rollout": "~2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": ">=4.0,<6.0"
     },
     "suggest": {
         "liip/doctrine-cache-bundle": "For use with the DoctrineCacheStorageAdapter"
