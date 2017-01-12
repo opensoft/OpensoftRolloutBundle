@@ -33,7 +33,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('success', sprintf("Feature '%s' is now globally activated", $feature));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -46,7 +46,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('danger', sprintf("Feature '%s' is now globally deactivated", $feature));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -61,7 +61,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -76,7 +76,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -90,7 +90,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' is now active in group '%s'", $feature, $group));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -104,7 +104,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' is no longer active in group '%s'", $feature, $group));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -125,7 +125,7 @@ class DefaultController extends ContainerAware
             $this->addFlash('danger', sprintf("User '%s' not found", $requestUser));
         }
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -140,7 +140,7 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("User '%s' was deactivated from feature '%s'", $user->getRolloutIdentifier(), $feature));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -153,7 +153,27 @@ class DefaultController extends ContainerAware
 
         $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
 
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->createRedirectToFeatureListReponse();
+    }
+
+    /**
+     * @param Request $request
+     * @param string $feature
+     * @return RedirectResponse
+     */
+    public function setRequestParamAction(Request $request, $feature)
+    {
+        $requestParam = $request->get('requestParam');
+        if ($requestParam === null) {
+            $this->addFlash('danger', 'Missing "requestParam" value');
+            return $this->createRedirectToFeatureListReponse();
+        }
+
+        $this->getRollout()->activateRequestParam($feature, $requestParam);
+
+        $this->addFlash('info', sprintf('Feature "%s" requestParam changed to "%s"', $feature, $requestParam));
+
+        return $this->createRedirectToFeatureListReponse();
     }
 
     /**
@@ -181,5 +201,13 @@ class DefaultController extends ContainerAware
     private function addFlash($type, $message)
     {
         $this->container->get('session')->getFlashBag()->add($type, $message);
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    private function createRedirectToFeatureListReponse()
+    {
+        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 }

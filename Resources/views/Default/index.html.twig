@@ -27,15 +27,16 @@
         <tr>
             <th></th>
             <th></th>
-            <th colspan="3">Priority Order</th>
+            <th colspan="4">Priority Order</th>
             <th></th>
         </tr>
         <tr>
             <th>Status</th>
             <th>Name</th>
-            <th>1) Percentage</th>
-            <th>2) Users</th>
-            <th>3) Groups of users</th>
+            <th>1) Request param name</th>
+            <th>2) Percentage</th>
+            <th>3) Users</th>
+            <th>4) Groups of users</th>
             <th>Global Actions</th>
         </tr>
     </thead>
@@ -45,7 +46,7 @@
 
             {% if feature.percentage == 100 %}
                 {% set rowClass = 'success' %}
-            {% elseif feature.groups|length > 0 or feature.users|length > 0 or feature.percentage > 0 %}
+            {% elseif feature.requestParam or feature.groups|length > 0 or feature.users|length > 0 or feature.percentage > 0 %}
                 {% set rowClass = 'warning' %}
             {% else %}
                 {% set rowClass = 'danger' %}
@@ -55,6 +56,8 @@
                 <td style="font-size: 24px;">
                     {% if feature.percentage == 100 %}
                         <span class="glyphicon glyphicon-ok-circle" title="This feature is globally enabled by having a percentage at 100%"></span>
+                    {% elseif feature.requestParam %}
+                        <span class="glyphicon glyphicon-warning-sign" title="This feature is partially enabled by request param"></span>
                     {% elseif feature.percentage > 0 %}
                         <span class="glyphicon glyphicon-warning-sign" title="This feature is partially enabled by percentage"></span>
                     {% elseif feature.groups|length > 0 or feature.users|length > 0 %}
@@ -67,6 +70,14 @@
                     <strong title="The name of the feature.  Used in code as part of checking for the feature.">
                         {% block feature_name %}{{ feature.name }}{% endblock %}
                     </strong>
+                </td>
+                <td>
+                    <form class="form-inline" role="form" action="{{ path('opensoft_rollout_feature_set_request_param', {'feature': feature.name}) }}">
+                        <div class="form-group">
+                            <input class="form-control input-sm" type="text" name="requestParam" id="requestParam" placeholder="requestParam" value="{{ feature.requestParam }}" />
+                        </div>
+                        <button class="btn btn-default btn-sm" type="submit">save</button>
+                    </form>
                 </td>
                 <td>
                     <div class="btn-group btn-group-xs pull-right" style="padding-left: 8px;">
@@ -164,7 +175,7 @@
 
         {% else %}
             <tr>
-                <td colspan="6">You have no features..</td>
+                <td colspan="7">You have no features..</td>
             </tr>
         {% endfor %}
     </tbody>
@@ -187,6 +198,8 @@
                     <h4>Priorities</h4>
                     <p>When calculating if a feature is enabled, a list of priorities will be matched before the first one returns true.</p>
                     <dl class="dl-horizontal">
+                        <dt>Request param</dt>
+                        <dd>Provides request parameter name, which has this feature active. On the client side request param can be set in headers, cookies, GET, POST etc.</dd>
                         <dt>Percentage</dt>
                         <dd>Controls the percentage of logged in users that will have this feature activated for them.</dd>
                         <dt>Users</dt>
