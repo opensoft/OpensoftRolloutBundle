@@ -5,7 +5,6 @@ namespace Opensoft\RolloutBundle\Controller;
 use Opensoft\Rollout\Rollout;
 use Opensoft\RolloutBundle\Rollout\UserProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class DefaultController extends ContainerAware
+class DefaultController extends Controller
 {
     /**
      * @return Response
@@ -198,7 +197,7 @@ class DefaultController extends ContainerAware
      * @param string $type
      * @param string $message
      */
-    private function addFlash($type, $message)
+    protected function addFlash($type, $message)
     {
         $this->container->get('session')->getFlashBag()->add($type, $message);
     }
