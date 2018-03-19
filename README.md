@@ -1,7 +1,7 @@
 OpensoftRolloutBundle
 =====================
 
-A Symfony2 Bundle for [opensoft/rollout](http://github.com/opensoft/rollout)
+A Symfony3 Bundle for [opensoft/rollout](http://github.com/opensoft/rollout)
 
 [![Build Status](https://travis-ci.org/opensoft/OpensoftRolloutBundle.svg?branch=master)](https://travis-ci.org/opensoft/OpensoftRolloutBundle) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/opensoft/OpensoftRolloutBundle/badges/quality-score.png?s=4980d55f8407070251ca97ba3b92f855cfce67ce)](https://scrutinizer-ci.com/g/opensoft/OpensoftRolloutBundle/) [![Code Coverage](https://scrutinizer-ci.com/g/opensoft/OpensoftRolloutBundle/badges/coverage.png?s=2a11bb9fe02adb950f1b446311c6044a70a2e1fd)](https://scrutinizer-ci.com/g/opensoft/OpensoftRolloutBundle/) [![Total Downloads](https://poser.pugx.org/opensoft/rollout-bundle/downloads.png)](https://packagist.org/packages/opensoft/rollout-bundle) [![Latest Stable Version](https://poser.pugx.org/opensoft/rollout-bundle/v/stable.png)](https://packagist.org/packages/opensoft/rollout-bundle)
 
@@ -30,9 +30,13 @@ Add the following to your configuration
 
 ```yaml
 opensoft_rollout:
-    user_provider_service: acme.user_provider_service
-    storage_service: acme.storage_service
+    user_provider_service: [YOUR USER PROVIDER SERVICE ID]
+    storage_service: [YOUR STORAGE SERVICE FOR ROLLOUT]
 ```
+
+* `user_provider_service`: If you are using one of the default Symfony user providers you can get the service ID by running `bin/console debug:container provider` e.g: `security.user.provider.ldap`
+* `storage_service`: Defaults to `rollout.storage.array_storage`, but you can also use the included `rollout.storage.doctrine_orm_storage` or create your own (see below for implementation)
+
 
 ### 3) Implement Interfaces
 
