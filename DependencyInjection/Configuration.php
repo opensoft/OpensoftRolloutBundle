@@ -26,10 +26,9 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('user_provider_service')->isRequired()->end()
-                ->scalarNode('storage_service')->defaultValue('Opensoft\Rollout\Storage\ArrayStorage')->end()
-            ->end()
-        ;
+            ->scalarNode('user_provider_service')->isRequired()->end()
+            ->scalarNode('storage_service')->defaultValue('Opensoft\Rollout\Storage\ArrayStorage')->end()
+            ->end();
 
         return $treeBuilder;
     }

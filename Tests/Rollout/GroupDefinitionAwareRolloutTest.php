@@ -36,7 +36,10 @@ class User implements RolloutUserInterface
 {
     public $name;
 
-    public function __construct($name)
+    /**
+     * @param string $name
+     */
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -48,5 +51,4 @@ class User implements RolloutUserInterface
     {
         return '';
     }
-
 }

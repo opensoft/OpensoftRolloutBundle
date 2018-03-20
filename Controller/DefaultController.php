@@ -2,7 +2,6 @@
 
 namespace Opensoft\RolloutBundle\Controller;
 
-use Opensoft\Rollout\Rollout;
 use Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout;
 use Opensoft\RolloutBundle\Rollout\UserProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -63,12 +62,7 @@ class DefaultController extends Controller
      */
     public function incrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $percentage = $rollout->get($feature)->getPercentage() + 10;
-        $rollout->activatePercentage($feature, $percentage);
-
-        $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
-
-        return $this->redirectToRoute('opensoft_rollout');
+        return $this->changePercentage($rollout, $feature, 10);
     }
 
     /**
@@ -79,12 +73,7 @@ class DefaultController extends Controller
      */
     public function decrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $percentage = $rollout->get($feature)->getPercentage() - 10;
-        $rollout->activatePercentage($feature, $percentage);
-
-        $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
-
-        return $this->redirectToRoute('opensoft_rollout');
+        return $this->changePercentage($rollout, $feature, -10);
     }
 
     /**
@@ -169,16 +158,21 @@ class DefaultController extends Controller
         string $id
     ) {
         $user = $userProvider->findByRolloutIdentifier($id);
-        $rollout->deactivateUser($feature, $user);
 
-        $this->addFlash(
-            'info',
-            sprintf(
-                "User '%s' was deactivated from feature '%s'",
-                $user->getRolloutIdentifier(),
-                $feature
-            )
-        );
+        if ($user) {
+            $rollout->deactivateUser($feature, $user);
+
+            $this->addFlash(
+                'info',
+                sprintf(
+                    "User '%s' was deactivated from feature '%s'",
+                    $user->getRolloutIdentifier(),
+                    $feature
+                )
+            );
+        } else {
+            $this->addFlash('danger', sprintf("User '%s' not found", $id));
+        }
 
         return $this->redirectToRoute('opensoft_rollout');
     }
@@ -218,6 +212,25 @@ class DefaultController extends Controller
         $rollout->activateRequestParam($feature, $requestParam);
 
         $this->addFlash('info', sprintf('Feature "%s" requestParam changed to "%s"', $feature, $requestParam));
+
+        return $this->redirectToRoute('opensoft_rollout');
+    }
+
+    /**
+     * Abstract out common functionality
+     *
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     * @param int $increment
+     *
+     * @return RedirectResponse
+     */
+    private function changePercentage(GroupDefinitionAwareRollout $rollout, string $feature, int $increment)
+    {
+        $percentage = $rollout->get($feature)->getPercentage() + $increment;
+        $rollout->activatePercentage($feature, $percentage);
+
+        $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
         return $this->redirectToRoute('opensoft_rollout');
     }

@@ -11,7 +11,6 @@ use Opensoft\RolloutBundle\Entity\Feature;
  */
 class DoctrineORMStorage implements StorageInterface
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
