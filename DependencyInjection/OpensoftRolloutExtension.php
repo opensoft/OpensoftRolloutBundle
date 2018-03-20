@@ -24,8 +24,8 @@ class OpensoftRolloutExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $container->setAlias('rollout.user_provider', $config['user_provider_service']);
-        $container->setAlias('rollout.storage', $config['storage_service']);
+        $container->setAlias('Opensoft\RolloutBundle\Rollout\UserProviderInterface', $config['user_provider_service']);
+        $container->setAlias('Opensoft\Rollout\Storage\StorageInterface', $config['storage_service']);
 
         $loader->load('services.xml');
     }

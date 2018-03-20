@@ -3,6 +3,7 @@
 namespace Opensoft\RolloutBundle\Controller;
 
 use Opensoft\Rollout\Rollout;
+use Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout;
 use Opensoft\RolloutBundle\Rollout\UserProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,198 +16,209 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends Controller
 {
     /**
+     * @param GroupDefinitionAwareRollout $rollout
+     *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(GroupDefinitionAwareRollout $rollout)
     {
-        return $this->container->get('templating')->renderResponse('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->getRollout()));
+        return $this->render('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $rollout));
     }
 
     /**
-     * @param  string           $feature
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
      * @return RedirectResponse
      */
-    public function activateAction($feature)
+    public function activateAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $this->getRollout()->activate($feature);
+        $rollout->activate($feature);
 
         $this->addFlash('success', sprintf("Feature '%s' is now globally activated", $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
-     * @param  string           $feature
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
      * @return RedirectResponse
      */
-    public function deactivateAction($feature)
+    public function deactivateAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $this->getRollout()->deactivate($feature);
+        $rollout->deactivate($feature);
 
         $this->addFlash('danger', sprintf("Feature '%s' is now globally deactivated", $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
-     * @param  string           $feature
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
      * @return RedirectResponse
      */
-    public function incrementPercentageAction($feature)
+    public function incrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $rollout = $this->getRollout();
         $percentage = $rollout->get($feature)->getPercentage() + 10;
         $rollout->activatePercentage($feature, $percentage);
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
-     * @param  string           $feature
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
      * @return RedirectResponse
      */
-    public function decrementPercentageAction($feature)
+    public function decrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
     {
-        $rollout = $this->getRollout();
         $percentage = $rollout->get($feature)->getPercentage() - 10;
         $rollout->activatePercentage($feature, $percentage);
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
-     * @param  string           $feature
-     * @param  string           $group
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     * @param string $group
+     *
      * @return RedirectResponse
      */
-    public function activateGroupAction($feature, $group)
+    public function activateGroupAction(GroupDefinitionAwareRollout $rollout, string $feature, string $group)
     {
-        $this->getRollout()->activateGroup($feature, $group);
+        $rollout->activateGroup($feature, $group);
 
         $this->addFlash('info', sprintf("Feature '%s' is now active in group '%s'", $feature, $group));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
-     * @param  string           $feature
-     * @param  string           $group
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     * @param string $group
+     *
      * @return RedirectResponse
      */
-    public function deactivateGroupAction($feature, $group)
+    public function deactivateGroupAction(GroupDefinitionAwareRollout $rollout, string $feature, string $group)
     {
-        $this->getRollout()->deactivateGroup($feature, $group);
+        $rollout->deactivateGroup($feature, $group);
 
         $this->addFlash('info', sprintf("Feature '%s' is no longer active in group '%s'", $feature, $group));
 
-        return $this->createRedirectToFeatureListReponse();
-    }
-
-    /**
-     * @param  Request          $request
-     * @param  string           $feature
-     * @return RedirectResponse
-     */
-    public function activateUserAction(Request $request, $feature)
-    {
-        $requestUser = $request->get('user');
-        $user = $this->getRolloutUserProvider()->findByRolloutIdentifier($requestUser);
-
-        if ($user) {
-            $this->getRollout()->activateUser($feature, $user);
-
-            $this->addFlash('info', sprintf("User '%s' was activated in feature '%s'", $user->getRolloutIdentifier(), $feature));
-        } else {
-            $this->addFlash('danger', sprintf("User '%s' not found", $requestUser));
-        }
-
-        return $this->createRedirectToFeatureListReponse();
-    }
-
-    /**
-     * @param  string           $feature
-     * @param  string           $id
-     * @return RedirectResponse
-     */
-    public function deactivateUserAction($feature, $id)
-    {
-        $user = $this->getRolloutUserProvider()->findByRolloutIdentifier($id);
-        $this->getRollout()->deactivateUser($feature, $user);
-
-        $this->addFlash('info', sprintf("User '%s' was deactivated from feature '%s'", $user->getRolloutIdentifier(), $feature));
-
-        return $this->createRedirectToFeatureListReponse();
-    }
-
-    /**
-     * @param  string           $feature
-     * @return RedirectResponse
-     */
-    public function removeAction($feature)
-    {
-        $this->getRollout()->remove($feature);
-
-        $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
-
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
      * @param Request $request
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param UserProviderInterface $userProvider
      * @param string $feature
+     *
      * @return RedirectResponse
      */
-    public function setRequestParamAction(Request $request, $feature)
-    {
-        $requestParam = $request->get('requestParam');
-        if ($requestParam === null) {
-            $this->addFlash('danger', 'Missing "requestParam" value');
-            return $this->createRedirectToFeatureListReponse();
+    public function activateUserAction(
+        Request $request,
+        GroupDefinitionAwareRollout $rollout,
+        UserProviderInterface $userProvider,
+        string $feature
+    ) {
+        $requestUser = $request->get('user');
+        $user = $userProvider->findByRolloutIdentifier($requestUser);
+
+        if ($user) {
+            $rollout->activateUser($feature, $user);
+
+            $this->addFlash(
+                'info',
+                sprintf(
+                    "User '%s' was activated in feature '%s'",
+                    $user->getRolloutIdentifier(),
+                    $feature
+                )
+            );
+        } else {
+            $this->addFlash('danger', sprintf("User '%s' not found", $requestUser));
         }
 
-        $this->getRollout()->activateRequestParam($feature, $requestParam);
+        return $this->redirectToRoute('opensoft_rollout');
+    }
+
+    /**
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param UserProviderInterface $userProvider
+     * @param string $feature
+     * @param string $id
+     *
+     * @return RedirectResponse
+     */
+    public function deactivateUserAction(
+        GroupDefinitionAwareRollout $rollout,
+        UserProviderInterface $userProvider,
+        string $feature,
+        string $id
+    ) {
+        $user = $userProvider->findByRolloutIdentifier($id);
+        $rollout->deactivateUser($feature, $user);
+
+        $this->addFlash(
+            'info',
+            sprintf(
+                "User '%s' was deactivated from feature '%s'",
+                $user->getRolloutIdentifier(),
+                $feature
+            )
+        );
+
+        return $this->redirectToRoute('opensoft_rollout');
+    }
+
+    /**
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    {
+        $rollout->remove($feature);
+
+        $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
+
+        return $this->redirectToRoute('opensoft_rollout');
+    }
+
+    /**
+     * @param Request $request
+     * @param GroupDefinitionAwareRollout $rollout
+     * @param string $feature
+     *
+     * @return RedirectResponse
+     */
+    public function setRequestParamAction(Request $request, GroupDefinitionAwareRollout $rollout, string $feature)
+    {
+        $requestParam = $request->get('requestParam');
+
+        if ($requestParam === null) {
+            $this->addFlash('danger', 'Missing "requestParam" value');
+            
+            return $this->redirectToRoute('opensoft_rollout');
+        }
+
+        $rollout->activateRequestParam($feature, $requestParam);
 
         $this->addFlash('info', sprintf('Feature "%s" requestParam changed to "%s"', $feature, $requestParam));
 
-        return $this->createRedirectToFeatureListReponse();
-    }
-
-    /**
-     * @return Rollout
-     */
-    private function getRollout()
-    {
-        return $this->container->get('rollout');
-    }
-
-    /**
-     * @return UserProviderInterface
-     */
-    private function getRolloutUserProvider()
-    {
-        return $this->container->get('rollout.user_provider');
-    }
-
-    /**
-     * Helper for adding flash messages
-     *
-     * @param string $type
-     * @param string $message
-     */
-    protected function addFlash($type, $message)
-    {
-        $this->container->get('session')->getFlashBag()->add($type, $message);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    private function createRedirectToFeatureListReponse()
-    {
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
+        return $this->redirectToRoute('opensoft_rollout');
     }
 }
