@@ -15,24 +15,41 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends Controller
 {
     /**
-     * @param GroupDefinitionAwareRollout $rollout
-     *
-     * @return Response
+     * @var GroupDefinitionAwareRollout
      */
-    public function indexAction(GroupDefinitionAwareRollout $rollout)
-    {
-        return $this->render('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $rollout));
-    }
+    private $rollout;
+
+    /**
+     * @var UserProviderInterface
+     */
+    private $userProvider;
 
     /**
      * @param GroupDefinitionAwareRollout $rollout
+     * @param UserProviderInterface $userProvider
+     */
+    public function __construct(GroupDefinitionAwareRollout $rollout, UserProviderInterface $userProvider)
+    {
+        $this->rollout = $rollout;
+        $this->userProvider = $userProvider;
+    }
+
+    /**
+     * @return Response
+     */
+    public function indexAction()
+    {
+        return $this->render('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->rollout));
+    }
+
+    /**
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function activateAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    public function activateAction(string $feature)
     {
-        $rollout->activate($feature);
+        $this->rollout->activate($feature);
 
         $this->addFlash('success', sprintf("Feature '%s' is now globally activated", $feature));
 
@@ -40,14 +57,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function deactivateAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    public function deactivateAction(string $feature)
     {
-        $rollout->deactivate($feature);
+        $this->rollout->deactivate($feature);
 
         $this->addFlash('danger', sprintf("Feature '%s' is now globally deactivated", $feature));
 
@@ -55,37 +71,34 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function incrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    public function incrementPercentageAction(string $feature)
     {
-        return $this->changePercentage($rollout, $feature, 10);
+        return $this->changePercentage($feature, 10);
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function decrementPercentageAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    public function decrementPercentageAction(string $feature)
     {
-        return $this->changePercentage($rollout, $feature, -10);
+        return $this->changePercentage($feature, -10);
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      * @param string $group
      *
      * @return RedirectResponse
      */
-    public function activateGroupAction(GroupDefinitionAwareRollout $rollout, string $feature, string $group)
+    public function activateGroupAction(string $feature, string $group)
     {
-        $rollout->activateGroup($feature, $group);
+        $this->rollout->activateGroup($feature, $group);
 
         $this->addFlash('info', sprintf("Feature '%s' is now active in group '%s'", $feature, $group));
 
@@ -93,15 +106,14 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      * @param string $group
      *
      * @return RedirectResponse
      */
-    public function deactivateGroupAction(GroupDefinitionAwareRollout $rollout, string $feature, string $group)
+    public function deactivateGroupAction(string $feature, string $group)
     {
-        $rollout->deactivateGroup($feature, $group);
+        $this->rollout->deactivateGroup($feature, $group);
 
         $this->addFlash('info', sprintf("Feature '%s' is no longer active in group '%s'", $feature, $group));
 
@@ -110,23 +122,17 @@ class DefaultController extends Controller
 
     /**
      * @param Request $request
-     * @param GroupDefinitionAwareRollout $rollout
-     * @param UserProviderInterface $userProvider
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function activateUserAction(
-        Request $request,
-        GroupDefinitionAwareRollout $rollout,
-        UserProviderInterface $userProvider,
-        string $feature
-    ) {
+    public function activateUserAction(Request $request, string $feature) 
+    {
         $requestUser = $request->get('user');
-        $user = $userProvider->findByRolloutIdentifier($requestUser);
+        $user = $this->userProvider->findByRolloutIdentifier($requestUser);
 
         if ($user) {
-            $rollout->activateUser($feature, $user);
+            $this->rollout->activateUser($feature, $user);
 
             $this->addFlash(
                 'info',
@@ -144,23 +150,17 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
-     * @param UserProviderInterface $userProvider
      * @param string $feature
      * @param string $id
      *
      * @return RedirectResponse
      */
-    public function deactivateUserAction(
-        GroupDefinitionAwareRollout $rollout,
-        UserProviderInterface $userProvider,
-        string $feature,
-        string $id
-    ) {
-        $user = $userProvider->findByRolloutIdentifier($id);
+    public function deactivateUserAction(string $feature, string $id) 
+    {
+        $user = $this->userProvider->findByRolloutIdentifier($id);
 
         if ($user) {
-            $rollout->deactivateUser($feature, $user);
+            $this->rollout->deactivateUser($feature, $user);
 
             $this->addFlash(
                 'info',
@@ -178,14 +178,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function removeAction(GroupDefinitionAwareRollout $rollout, string $feature)
+    public function removeAction(string $feature)
     {
-        $rollout->remove($feature);
+        $this->rollout->remove($feature);
 
         $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
 
@@ -194,12 +193,11 @@ class DefaultController extends Controller
 
     /**
      * @param Request $request
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      *
      * @return RedirectResponse
      */
-    public function setRequestParamAction(Request $request, GroupDefinitionAwareRollout $rollout, string $feature)
+    public function setRequestParamAction(Request $request, string $feature)
     {
         $requestParam = $request->get('requestParam');
 
@@ -209,7 +207,7 @@ class DefaultController extends Controller
             return $this->redirectToRoute('opensoft_rollout');
         }
 
-        $rollout->activateRequestParam($feature, $requestParam);
+        $this->rollout->activateRequestParam($feature, $requestParam);
 
         $this->addFlash('info', sprintf('Feature "%s" requestParam changed to "%s"', $feature, $requestParam));
 
@@ -219,16 +217,15 @@ class DefaultController extends Controller
     /**
      * Abstract out common functionality
      *
-     * @param GroupDefinitionAwareRollout $rollout
      * @param string $feature
      * @param int $increment
      *
      * @return RedirectResponse
      */
-    private function changePercentage(GroupDefinitionAwareRollout $rollout, string $feature, int $increment)
+    private function changePercentage(string $feature, int $increment)
     {
-        $percentage = $rollout->get($feature)->getPercentage() + $increment;
-        $rollout->activatePercentage($feature, $percentage);
+        $percentage = $this->rollout->get($feature)->getPercentage() + $increment;
+        $this->rollout->activatePercentage($feature, $percentage);
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
