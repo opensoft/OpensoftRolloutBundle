@@ -2,7 +2,7 @@
 
 namespace Opensoft\RolloutBundle\Storage\Doctrine;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Opensoft\Rollout\Storage\StorageInterface;
 use Opensoft\RolloutBundle\Entity\Feature;
 
@@ -12,7 +12,7 @@ use Opensoft\RolloutBundle\Entity\Feature;
 class DoctrineORMStorage implements StorageInterface
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var \Doctrine\ORM\EntityManagerInterface
      */
     protected $em;
 
@@ -27,10 +27,10 @@ class DoctrineORMStorage implements StorageInterface
     protected $class;
 
     /**
-     * @param EntityManager $em
-     * @param string        $class
+     * @param EntityManagerInterface $em
+     * @param string                 $class
      */
-    public function __construct(EntityManager $em, $class)
+    public function __construct(EntityManagerInterface $em, $class)
     {
         $this->em = $em;
         $this->repository = $em->getRepository($class);
