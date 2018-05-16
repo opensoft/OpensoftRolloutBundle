@@ -47,7 +47,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function activateAction(string $feature)
+    public function activateAction($feature)
     {
         $this->rollout->activate($feature);
 
@@ -61,7 +61,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deactivateAction(string $feature)
+    public function deactivateAction($feature)
     {
         $this->rollout->deactivate($feature);
 
@@ -75,7 +75,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function incrementPercentageAction(string $feature)
+    public function incrementPercentageAction($feature)
     {
         return $this->changePercentage($feature, 10);
     }
@@ -85,7 +85,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function decrementPercentageAction(string $feature)
+    public function decrementPercentageAction($feature)
     {
         return $this->changePercentage($feature, -10);
     }
@@ -96,7 +96,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function activateGroupAction(string $feature, string $group)
+    public function activateGroupAction($feature, $group)
     {
         $this->rollout->activateGroup($feature, $group);
 
@@ -111,7 +111,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deactivateGroupAction(string $feature, string $group)
+    public function deactivateGroupAction($feature, $group)
     {
         $this->rollout->deactivateGroup($feature, $group);
 
@@ -126,7 +126,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function activateUserAction(Request $request, string $feature) 
+    public function activateUserAction(Request $request, $feature)
     {
         $requestUser = $request->get('user');
         $user = $this->userProvider->findByRolloutIdentifier($requestUser);
@@ -155,7 +155,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deactivateUserAction(string $feature, string $id) 
+    public function deactivateUserAction($feature, $id)
     {
         $user = $this->userProvider->findByRolloutIdentifier($id);
 
@@ -182,7 +182,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function removeAction(string $feature)
+    public function removeAction($feature)
     {
         $this->rollout->remove($feature);
 
@@ -197,7 +197,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    public function setRequestParamAction(Request $request, string $feature)
+    public function setRequestParamAction(Request $request, $feature)
     {
         $requestParam = $request->get('requestParam');
 
@@ -222,7 +222,7 @@ class DefaultController extends Controller
      *
      * @return RedirectResponse
      */
-    private function changePercentage(string $feature, int $increment)
+    private function changePercentage($feature, $increment)
     {
         $percentage = $this->rollout->get($feature)->getPercentage() + $increment;
         $this->rollout->activatePercentage($feature, $percentage);
