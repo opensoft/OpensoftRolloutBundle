@@ -16,5 +16,13 @@
         <service id="Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage">
             <argument key="$class">OpensoftRolloutBundle:Feature</argument>
         </service>
+
+        <!-- Add aliases for BC -->
+        <service
+            alias="Opensoft\Rollout\Storage\ArrayStorage"
+            id="rollout.storage.array_storage"></service>
+        <service
+            alias="Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage"
+            id="rollout.storage.doctrine_orm_storage"></service>
     </services>
 </container>

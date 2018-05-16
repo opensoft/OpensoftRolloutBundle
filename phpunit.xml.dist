@@ -14,7 +14,7 @@
     bootstrap                   = "vendor/autoload.php" >
 
     <testsuites>
-        <testsuite name="Symfony3 Rollout Bundle Test Suite">
+        <testsuite name="Symfony2 Rollout Bundle Test Suite">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
