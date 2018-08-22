@@ -4,34 +4,25 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="rollout.class">Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout</parameter>
-
-        <parameter key="rollout.storage.doctrine_orm_storage.class">Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage</parameter>
-        <parameter key="rollout.storage.array_storage.class">Opensoft\Rollout\Storage\ArrayStorage</parameter>
-
-        <parameter key="rollout.twig_extension.class">Opensoft\RolloutBundle\Twig\Extension\RolloutExtension</parameter>
-    </parameters>
-
     <services>
-        <service id="rollout" class="%rollout.class%">
-            <argument type="service" id="rollout.storage" />
+        <!-- Default configuration for services in *this* file -->
+        <defaults autowire="true" autoconfigure="true" public="false" />
+
+        <prototype namespace="Opensoft\RolloutBundle\" resource="../../{Twig,Rollout,Storage,Controller}" />
+
+         <!-- Explicitly configure these services -->
+        <service id="Opensoft\Rollout\Storage\ArrayStorage"></service>
+
+        <service id="Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage">
+            <argument key="$class">OpensoftRolloutBundle:Feature</argument>
         </service>
 
-        <!-- Storages -->
-        <service id="rollout.storage.array_storage" class="%rollout.storage.array_storage.class%">
-
-        </service>
-
-        <service id="rollout.storage.doctrine_orm_storage" class="%rollout.storage.doctrine_orm_storage.class%">
-            <argument type="service" id="doctrine.orm.default_entity_manager" />
-            <argument>OpensoftRolloutBundle:Feature</argument>
-        </service>
-
-        <!-- Template Extensions -->
-        <service id="rollout.twig_extension" class="%rollout.twig_extension.class%">
-            <tag name="twig.extension" />
-            <argument type="service" id="rollout" />
-        </service>
+        <!-- Add aliases for BC -->
+        <service
+            alias="Opensoft\Rollout\Storage\ArrayStorage"
+            id="rollout.storage.array_storage"></service>
+        <service
+            alias="Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage"
+            id="rollout.storage.doctrine_orm_storage"></service>
     </services>
 </container>

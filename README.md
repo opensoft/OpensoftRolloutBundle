@@ -26,17 +26,16 @@ new Opensoft\RolloutBundle\OpensoftRolloutBundle(),
 
 ### 2) Configuration
 
-Add the following to your configuration
+Add the following to your configuration (supports auto-wiring)
 
 ```yaml
 opensoft_rollout:
-    user_provider_service: [YOUR USER PROVIDER SERVICE ID]
+    user_provider_service: [YOUR USER PROVIDER SERVICE]
     storage_service: [YOUR STORAGE SERVICE FOR ROLLOUT]
 ```
 
-* `user_provider_service`: If you are using one of the default Symfony user providers you can get the service ID by running `bin/console debug:container provider` e.g: `security.user.provider.ldap`
-* `storage_service`: Defaults to `rollout.storage.array_storage`, but you can also use the included `rollout.storage.doctrine_orm_storage` or create your own (see below for implementation)
-
+* `user_provider_service`: Add the service id (generally the FQDN with auto-wiring) of the UserProvider to which you added the Rollout `UserProviderInterface`
+* `storage_service`: Defaults to `Opensoft\Rollout\Storage\ArrayStorage`, but you can also use the included `Opensoft\RolloutBundle\Storage\Doctrine\DoctrineORMStorage` or create your own (see below for implementation)
 
 ### 3) Implement Interfaces
 

@@ -10,7 +10,7 @@ use Opensoft\Rollout\RolloutUserInterface;
 interface UserProviderInterface
 {
     /**
-     * @param  mixed                     $id
+     * @param mixed $id
      * @return RolloutUserInterface|null
      */
     public function findByRolloutIdentifier($id);
