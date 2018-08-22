@@ -28,7 +28,7 @@ class DoctrineORMStorage implements StorageInterface
 
     /**
      * @param EntityManagerInterface $em
-     * @param string                 $class
+     * @param string $class
      */
     public function __construct(EntityManagerInterface $em, $class)
     {
@@ -38,7 +38,8 @@ class DoctrineORMStorage implements StorageInterface
     }
 
     /**
-     * @param  string     $key
+     * @param string key
+     *
      * @return mixed|null Null if the value is not found
      */
     public function get($key)
@@ -54,7 +55,7 @@ class DoctrineORMStorage implements StorageInterface
 
     /**
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function set($key, $value)
     {
