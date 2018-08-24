@@ -192,17 +192,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * Helper for adding flash messages
-     *
-     * @param string $type
-     * @param string $message
-     */
-    protected function addFlash($type, $message)
-    {
-        $this->container->get('session')->getFlashBag()->add($type, $message);
-    }
-
-    /**
      * @return RedirectResponse
      */
     private function createRedirectToFeatureListReponse()
