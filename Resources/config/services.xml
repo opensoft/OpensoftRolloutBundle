@@ -14,7 +14,7 @@
     </parameters>
 
     <services>
-        <service id="rollout" class="%rollout.class%">
+        <service id="rollout" class="%rollout.class%" public="true">
             <argument type="service" id="rollout.storage" />
         </service>
 
