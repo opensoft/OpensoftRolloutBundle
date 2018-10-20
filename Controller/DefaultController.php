@@ -19,7 +19,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->container->get('templating')->renderResponse('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->getRollout()));
+        return $this->render('OpensoftRolloutBundle:Default:index.html.twig', array('rollout' => $this->getRollout()));
     }
 
     /**
@@ -32,7 +32,7 @@ class DefaultController extends Controller
 
         $this->addFlash('success', sprintf("Feature '%s' is now globally activated", $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -45,7 +45,7 @@ class DefaultController extends Controller
 
         $this->addFlash('danger', sprintf("Feature '%s' is now globally deactivated", $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -60,7 +60,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -75,7 +75,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("Feature '%s' percentage changed to %d%% of all users", $feature, $percentage));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -89,7 +89,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("Feature '%s' is now active in group '%s'", $feature, $group));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -103,7 +103,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("Feature '%s' is no longer active in group '%s'", $feature, $group));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -124,7 +124,7 @@ class DefaultController extends Controller
             $this->addFlash('danger', sprintf("User '%s' not found", $requestUser));
         }
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -139,7 +139,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("User '%s' was deactivated from feature '%s'", $user->getRolloutIdentifier(), $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -152,7 +152,7 @@ class DefaultController extends Controller
 
         $this->addFlash('info', sprintf("Feature '%s' was removed from rollout.", $feature));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -165,14 +165,14 @@ class DefaultController extends Controller
         $requestParam = $request->get('requestParam');
         if ($requestParam === null) {
             $this->addFlash('danger', 'Missing "requestParam" value');
-            return $this->createRedirectToFeatureListReponse();
+            return $this->redirectToRoute('opensoft_rollout');
         }
 
         $this->getRollout()->activateRequestParam($feature, $requestParam);
 
         $this->addFlash('info', sprintf('Feature "%s" requestParam changed to "%s"', $feature, $requestParam));
 
-        return $this->createRedirectToFeatureListReponse();
+        return $this->redirectToRoute('opensoft_rollout');
     }
 
     /**
@@ -189,24 +189,5 @@ class DefaultController extends Controller
     private function getRolloutUserProvider()
     {
         return $this->container->get('rollout.user_provider');
-    }
-
-    /**
-     * Helper for adding flash messages
-     *
-     * @param string $type
-     * @param string $message
-     */
-    protected function addFlash($type, $message)
-    {
-        $this->container->get('session')->getFlashBag()->add($type, $message);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    private function createRedirectToFeatureListReponse()
-    {
-        return new RedirectResponse($this->container->get('router')->generate('opensoft_rollout'));
     }
 }
