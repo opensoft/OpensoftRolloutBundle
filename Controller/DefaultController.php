@@ -4,7 +4,7 @@ namespace Opensoft\RolloutBundle\Controller;
 
 use Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout;
 use Opensoft\RolloutBundle\Rollout\UserProviderInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * @var GroupDefinitionAwareRollout
@@ -203,7 +203,7 @@ class DefaultController extends Controller
 
         if ($requestParam === null) {
             $this->addFlash('danger', 'Missing "requestParam" value');
-            
+
             return $this->redirectToRoute('opensoft_rollout');
         }
 
