@@ -17,11 +17,11 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('opensoft_rollout');
-
-        if (method_exists($treeBuilder, 'getRootNode')) {
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('opensoft_rollout');
             $rootNode = $treeBuilder->getRootNode();
         } else {
+            $treeBuilder = new TreeBuilder();
             $rootNode = $treeBuilder->root('opensoft_rollout');
         }
 
