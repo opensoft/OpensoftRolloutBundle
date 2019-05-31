@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  *
  * @ORM\Table(name="rollout_feature")
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class Feature
 {

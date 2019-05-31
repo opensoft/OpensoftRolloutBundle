@@ -2,8 +2,8 @@
 
 namespace Opensoft\RolloutBundle\Twig\Extension;
 
-use Opensoft\Rollout\Rollout;
 use Opensoft\Rollout\RolloutUserInterface;
+use Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout;
 
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
@@ -11,14 +11,14 @@ use Opensoft\Rollout\RolloutUserInterface;
 class RolloutExtension extends \Twig_Extension
 {
     /**
-     * @var Rollout
+     * @var GroupDefinitionAwareRollout
      */
     private $rollout;
 
     /**
-     * @param Rollout $rollout
+     * @param GroupDefinitionAwareRollout $rollout
      */
-    public function __construct(Rollout $rollout)
+    public function __construct(GroupDefinitionAwareRollout $rollout)
     {
         $this->rollout = $rollout;
     }

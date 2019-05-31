@@ -1,4 +1,4 @@
-{% extends "OpensoftRolloutBundle::layout.html.twig" %}
+{% extends "@OpensoftRollout/layout.html.twig" %}
 
 {% block rollout_content %}
 <div class="page-header">
@@ -194,7 +194,7 @@
                     <h4>Status</h4>
                     <p>Shows a status symbol based on how much of the feature is rolled out</p>
                     <h4>Name</h4>
-                    <p>The feature name.  This key is use in the code and must match exactly.</p>
+                    <p>The feature name.  This key is used in the code and must match exactly.</p>
                     <h4>Priorities</h4>
                     <p>When calculating if a feature is enabled, a list of priorities will be matched before the first one returns true.</p>
                     <dl class="dl-horizontal">
@@ -203,9 +203,9 @@
                         <dt>Percentage</dt>
                         <dd>Controls the percentage of logged in users that will have this feature activated for them.</dd>
                         <dt>Users</dt>
-                        <dd>Provide a list of individual users which have this feature active</dd>
+                        <dd>Provides a list of individual users which have this feature active</dd>
                         <dt>Groups of users</dt>
-                        <dd>Define custom groups that are matched dynamically</dd>
+                        <dd>Defines custom groups that are matched dynamically</dd>
                     </dl>
                     <h4>Global Actions</h4>
                     <p>

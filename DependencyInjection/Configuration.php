@@ -17,8 +17,13 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('opensoft_rollout');
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('opensoft_rollout');
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $treeBuilder = new TreeBuilder();
+            $rootNode = $treeBuilder->root('opensoft_rollout');
+        }
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
@@ -26,10 +31,9 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('user_provider_service')->isRequired()->end()
-                ->scalarNode('storage_service')->defaultValue('rollout.storage.array_storage')->end()
-            ->end()
-        ;
+            ->scalarNode('user_provider_service')->isRequired()->end()
+            ->scalarNode('storage_service')->defaultValue('Opensoft\Rollout\Storage\ArrayStorage')->end()
+            ->end();
 
         return $treeBuilder;
     }

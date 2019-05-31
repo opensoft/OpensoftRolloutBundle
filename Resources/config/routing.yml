@@ -2,54 +2,54 @@
 opensoft_rollout:
     path: /
     defaults:
-        _controller: OpensoftRolloutBundle:Default:index
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::indexAction
 
 opensoft_rollout_feature_activate:
     path: /{feature}/activate
     defaults:
-        _controller: OpensoftRolloutBundle:Default:activate
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::activateAction
 
 opensoft_rollout_feature_deactivate:
     path: /{feature}/deactivate
     defaults:
-        _controller: OpensoftRolloutBundle:Default:deactivate
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::deactivateAction
 
 opensoft_rollout_feature_increment_percentage:
     path: /{feature}/increment-percentage
     defaults:
-        _controller: OpensoftRolloutBundle:Default:incrementPercentage
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::incrementPercentageAction
 
 opensoft_rollout_feature_decrement_percentage:
     path: /{feature}/decrement-percentage
     defaults:
-        _controller: OpensoftRolloutBundle:Default:decrementPercentage
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::decrementPercentageAction
 
 opensoft_rollout_feature_activate_group:
     path: /{feature}/activate-group/{group}
     defaults:
-        _controller: OpensoftRolloutBundle:Default:activateGroup
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::activateGroupAction
 
 opensoft_rollout_feature_deactivate_group:
     path: /{feature}/deactivate-group/{group}
     defaults:
-        _controller: OpensoftRolloutBundle:Default:deactivateGroup
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::deactivateGroupAction
 
 opensoft_rollout_feature_activate_user:
     path: /{feature}/activate-user
     defaults:
-        _controller: OpensoftRolloutBundle:Default:activateUser
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::activateUserAction
 
 opensoft_rollout_feature_deactivate_user:
     path: /{feature}/deactivate-user/{id}
     defaults:
-        _controller: OpensoftRolloutBundle:Default:deactivateUser
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::deactivateUserAction
 
 opensoft_rollout_feature_remove:
     path: /{feature}/remove
     defaults:
-        _controller: OpensoftRolloutBundle:Default:remove
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::removeAction
 
 opensoft_rollout_feature_set_request_param:
     path: /{feature}/set-request-param
     defaults:
-        _controller: OpensoftRolloutBundle:Default:setRequestParam
+        _controller: Opensoft\RolloutBundle\Controller\DefaultController::setRequestParamAction

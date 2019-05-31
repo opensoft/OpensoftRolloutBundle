@@ -6,8 +6,11 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 before_script:
+  - export COMPOSER_MEMORY_LIMIT=-1
+  - phpenv config-rm xdebug.ini
   - composer install -n
 
 script:
