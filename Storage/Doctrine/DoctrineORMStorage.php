@@ -12,6 +12,11 @@ use Opensoft\RolloutBundle\Entity\Feature;
 class DoctrineORMStorage implements StorageInterface
 {
     /**
+     * @var array
+     */
+    private $cache = [];
+    
+    /**
      * @var \Doctrine\ORM\EntityManagerInterface
      */
     protected $em;
@@ -44,8 +49,17 @@ class DoctrineORMStorage implements StorageInterface
      */
     public function get($key)
     {
+        if (isset($this->cache[$key])) {
+            /** @var Feature $feature */
+            $feature = $this->cache[$key];
+
+            return $feature->getSettings();
+        }
+        
         /** @var Feature $feature */
         $feature = $this->repository->findOneBy(array('name' => $key));
+        $this->cache[$key] = $feature;
+        
         if (!$feature) {
             return null;
         }
