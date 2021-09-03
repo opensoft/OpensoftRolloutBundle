@@ -4,11 +4,13 @@ namespace Opensoft\RolloutBundle\Twig\Extension;
 
 use Opensoft\Rollout\RolloutUserInterface;
 use Opensoft\RolloutBundle\Rollout\GroupDefinitionAwareRollout;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class RolloutExtension extends \Twig_Extension
+class RolloutExtension extends AbstractExtension
 {
     /**
      * @var GroupDefinitionAwareRollout
@@ -31,7 +33,7 @@ class RolloutExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('rollout_is_active', function ($feature, RolloutUserInterface $user = null) {
+            new TwigFunction('rollout_is_active', function ($feature, RolloutUserInterface $user = null) {
                 return $this->rollout->isActive($feature, $user);
             })
         );
